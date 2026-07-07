@@ -11,6 +11,7 @@ interface AuthContextValue {
   token: string | null
   loading: boolean
   isDoctor: boolean
+  isAdmin: boolean
   login: (token: string, user: IUser) => void
   logout: () => void
 }
@@ -78,7 +79,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       token,
       loading,
-      isDoctor: user?.role === EUserRole.DOCTOR,
+      // Doctors have no role; they are flagged with isDoctor by the backend.
+      isDoctor: user?.isDoctor === true,
+      isAdmin: user?.role === EUserRole.ADMIN,
       login,
       logout,
     }),

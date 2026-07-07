@@ -31,8 +31,17 @@ export default function RegisterPage() {
       { name, email, password },
       {
         onSuccess: ({ token, user }) => {
-          login(token, user)
-          router.push(user.role === EUserRole.DOCTOR ? "/painel" : "/unidades")
+          if (user.isDoctor) {
+            login(token, user)
+            router.push("/painel")
+            return
+          }
+          if (user.role === EUserRole.ADMIN) {
+            login(token, user)
+            router.push("/unidades")
+            return
+          }
+          setError("Você não tem permissão para acessar o painel.")
         },
         onError: () => setError("Não foi possível criar a conta. Verifique os dados."),
       },

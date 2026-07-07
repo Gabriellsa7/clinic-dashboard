@@ -9,6 +9,9 @@ export interface IUser {
   name: string
   email: string
   role?: EUserRole
+  // Doctors are created as health professionals and have no role.
+  // The backend flags them with isDoctor instead.
+  isDoctor?: boolean
   active?: boolean
   createdAt: Date
 }
