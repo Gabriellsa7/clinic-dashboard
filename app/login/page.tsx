@@ -24,9 +24,21 @@ export default function LoginPage() {
     loginMutation.mutate(
       { email, password },
       {
-        onSuccess: ({ token, user }) => {
-          login(token, user)
-          router.push(user.role === EUserRole.DOCTOR ? "/painel" : "/unidades")
+        onSuccess: ({ token, user, healthProfessional }) => {
+          // Doctors have no role; the isDoctor flag lives on the health professional.
+          if (healthProfessional?.isDoctor) {
+            login(token, { healthProfessional })
+            router.push("/painel")
+            return
+          }
+          // Admins keep their current access to the management area.
+          if (user?.role === EUserRole.ADMIN) {
+            login(token, { user })
+            router.push("/unidades")
+            return
+          }
+          // Regular USER accounts are not allowed into the dashboard.
+          setError("Você não tem permissão para acessar o painel.")
         },
         onError: () => setError("Email ou senha inválidos. Tente novamente."),
       },

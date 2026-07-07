@@ -2,6 +2,7 @@ import axios from "axios"
 
 export const TOKEN_KEY = "auth_token"
 export const USER_KEY = "auth_user"
+export const HEALTH_PROFESSIONAL_KEY = "auth_health_professional"
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001",

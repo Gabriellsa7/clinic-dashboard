@@ -20,7 +20,7 @@ export function Protected({
   children: ReactNode
 }) {
   const router = useRouter()
-  const { user, loading, isDoctor } = useAuth()
+  const { user, loading, isDoctor, isAdmin } = useAuth()
 
   useEffect(() => {
     if (loading) return
@@ -28,18 +28,27 @@ export function Protected({
       router.replace("/login")
       return
     }
+    // Doctor area: only users flagged as doctors may enter.
     if (role === "doctor" && !isDoctor) {
-      router.replace("/unidades")
+      router.replace(isAdmin ? "/unidades" : "/login")
       return
     }
-    if (role === "manager" && isDoctor) {
-      router.replace("/painel")
+    // Manager area: doctors go to their panel, and non-admin users (USER) are
+    // not allowed in at all.
+    if (role === "manager") {
+      if (isDoctor) {
+        router.replace("/painel")
+        return
+      }
+      if (!isAdmin) {
+        router.replace("/login")
+      }
     }
-  }, [loading, user, isDoctor, role, router])
+  }, [loading, user, isDoctor, isAdmin, role, router])
 
   if (loading || !user) return <Loader />
   if (role === "doctor" && !isDoctor) return <Loader />
-  if (role === "manager" && isDoctor) return <Loader />
+  if (role === "manager" && (isDoctor || !isAdmin)) return <Loader />
 
   return <>{children}</>
 }

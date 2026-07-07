@@ -6,13 +6,19 @@ import { useAuth } from "@/components/providers/auth-provider"
 
 export default function HomePage() {
   const router = useRouter()
-  const { user, loading, isDoctor } = useAuth()
+  const { user, loading, isDoctor, isAdmin } = useAuth()
 
   useEffect(() => {
     if (loading) return
-    if (!user) router.replace("/login")
-    else router.replace(isDoctor ? "/painel" : "/unidades")
-  }, [loading, user, isDoctor, router])
+    if (!user) {
+      router.replace("/login")
+      return
+    }
+    if (isDoctor) router.replace("/painel")
+    else if (isAdmin) router.replace("/unidades")
+    // Regular USER accounts have no dashboard access.
+    else router.replace("/login")
+  }, [loading, user, isDoctor, isAdmin, router])
 
   return (
     <div className="flex min-h-dvh items-center justify-center">

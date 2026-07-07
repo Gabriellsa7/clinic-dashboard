@@ -1,5 +1,5 @@
 import { api } from "@/lib/api"
-import type { AuthResponse, LoginPayload, RegisterPayload, IUser } from "@/lib/types"
+import type { AuthResponse, LoginPayload, RegisterPayload, IHealthProfessional, IUser } from "@/lib/types"
 
 /**
  * Auth endpoints. Adjust the paths below to match your backend routes.
@@ -15,9 +15,10 @@ export const authService = {
     return data
   },
 
-  // Returns the currently authenticated user based on the JWT.
+  // Returns the currently authenticated account based on the JWT. This can be a
+  // regular user (ADMIN / USER) or a health professional (doctor).
   me: async () => {
-    const { data } = await api.get<IUser>("/auth/me")
+    const { data } = await api.get<{ user?: IUser; healthProfessional?: IHealthProfessional }>("/auth/me")
     return data
   },
 }

@@ -30,9 +30,18 @@ export default function RegisterPage() {
     registerMutation.mutate(
       { name, email, password },
       {
-        onSuccess: ({ token, user }) => {
-          login(token, user)
-          router.push(user.role === EUserRole.DOCTOR ? "/painel" : "/unidades")
+        onSuccess: ({ token, user, healthProfessional }) => {
+          if (healthProfessional?.isDoctor) {
+            login(token, { healthProfessional })
+            router.push("/painel")
+            return
+          }
+          if (user?.role === EUserRole.ADMIN) {
+            login(token, { user })
+            router.push("/unidades")
+            return
+          }
+          setError("Você não tem permissão para acessar o painel.")
         },
         onError: () => setError("Não foi possível criar a conta. Verifique os dados."),
       },

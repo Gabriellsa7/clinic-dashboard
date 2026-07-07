@@ -41,6 +41,9 @@ export interface IHealthProfessional {
   email: string
   password: string
   professionalLicense: string
+  // Doctors have no user role; the backend flags the health professional
+  // record with isDoctor to grant access to the panel.
+  isDoctor?: boolean
   active: boolean
   createdAt: Date
   updatedAt: Date
@@ -61,5 +64,8 @@ export interface RegisterPayload {
 
 export interface AuthResponse {
   token: string
-  user: IUser
+  // Regular accounts (ADMIN / USER) come back as a user.
+  user?: IUser
+  // Doctors are stored as health professionals and carry the isDoctor flag.
+  healthProfessional?: IHealthProfessional
 }
