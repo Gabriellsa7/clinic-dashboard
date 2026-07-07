@@ -30,14 +30,14 @@ export default function RegisterPage() {
     registerMutation.mutate(
       { name, email, password },
       {
-        onSuccess: ({ token, user }) => {
-          if (user.isDoctor) {
-            login(token, user)
+        onSuccess: ({ token, user, healthProfessional }) => {
+          if (healthProfessional?.isDoctor) {
+            login(token, { healthProfessional })
             router.push("/painel")
             return
           }
-          if (user.role === EUserRole.ADMIN) {
-            login(token, user)
+          if (user?.role === EUserRole.ADMIN) {
+            login(token, { user })
             router.push("/unidades")
             return
           }

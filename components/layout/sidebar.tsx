@@ -32,8 +32,10 @@ const managerNav: NavItem[] = [
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname()
-  const { user, isDoctor, logout } = useAuth()
+  const { user, healthProfessional, isDoctor, logout } = useAuth()
   const nav = isDoctor ? doctorNav : managerNav
+  // Doctors are stored as health professionals and have no user record.
+  const displayName = isDoctor ? healthProfessional?.name : user?.name
 
   return (
     <div className="flex h-full flex-col bg-sidebar">
@@ -71,10 +73,10 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <div className="p-4">
         <div className="flex items-center gap-3 rounded-2xl bg-white/70 p-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-            {user?.name?.slice(0, 2).toUpperCase() ?? "DR"}
+            {displayName?.slice(0, 2).toUpperCase() ?? "DR"}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-foreground">{user?.name ?? "Usuário"}</p>
+            <p className="truncate text-sm font-semibold text-foreground">{displayName ?? "Usuário"}</p>
             <p className="truncate text-xs text-muted-foreground">
               {isDoctor ? "Médico" : "Responsável"}
             </p>

@@ -24,16 +24,16 @@ export default function LoginPage() {
     loginMutation.mutate(
       { email, password },
       {
-        onSuccess: ({ token, user }) => {
-          // Doctors have no role and are flagged with isDoctor -> go to /painel.
-          if (user.isDoctor) {
-            login(token, user)
+        onSuccess: ({ token, user, healthProfessional }) => {
+          // Doctors have no role; the isDoctor flag lives on the health professional.
+          if (healthProfessional?.isDoctor) {
+            login(token, { healthProfessional })
             router.push("/painel")
             return
           }
           // Admins keep their current access to the management area.
-          if (user.role === EUserRole.ADMIN) {
-            login(token, user)
+          if (user?.role === EUserRole.ADMIN) {
+            login(token, { user })
             router.push("/unidades")
             return
           }
