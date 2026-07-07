@@ -60,13 +60,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     authService
       .me()
       .then((account) => {
-        if (account.healthProfessional) {
-          setHealthProfessional(account.healthProfessional)
-          localStorage.setItem(HEALTH_PROFESSIONAL_KEY, JSON.stringify(account.healthProfessional))
-        }
         if (account.user) {
           setUser(account.user)
+          setHealthProfessional(null)
+
           localStorage.setItem(USER_KEY, JSON.stringify(account.user))
+          localStorage.removeItem(HEALTH_PROFESSIONAL_KEY)
+        } else if (account.healthProfessional) {
+          setHealthProfessional(account.healthProfessional)
+          setUser(null)
+
+          localStorage.setItem(
+            HEALTH_PROFESSIONAL_KEY,
+            JSON.stringify(account.healthProfessional)
+          )
+          localStorage.removeItem(USER_KEY)
         }
       })
       .catch(() => {
@@ -76,18 +84,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = useCallback<AuthContextValue["login"]>((newToken, account) => {
-    localStorage.setItem(TOKEN_KEY, newToken)
-    setToken(newToken)
+  localStorage.setItem(TOKEN_KEY, newToken)
+  setToken(newToken)
 
-    if (account.user) {
-      localStorage.setItem(USER_KEY, JSON.stringify(account.user))
-      setUser(account.user)
-    }
-    if (account.healthProfessional) {
-      localStorage.setItem(HEALTH_PROFESSIONAL_KEY, JSON.stringify(account.healthProfessional))
-      setHealthProfessional(account.healthProfessional)
-    }
-  }, [])
+  if (account.user) {
+    setUser(account.user)
+    setHealthProfessional(null)
+
+    localStorage.setItem(USER_KEY, JSON.stringify(account.user))
+    localStorage.removeItem(HEALTH_PROFESSIONAL_KEY)
+  } else if (account.healthProfessional) {
+    setHealthProfessional(account.healthProfessional)
+    setUser(null)
+
+    localStorage.setItem(
+      HEALTH_PROFESSIONAL_KEY,
+      JSON.stringify(account.healthProfessional)
+    )
+    localStorage.removeItem(USER_KEY)
+  }
+}, [])
 
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY)
