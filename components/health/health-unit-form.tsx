@@ -10,6 +10,15 @@ const empty: HealthUnitInput = {
   name: "",
   phone: "",
   email: "",
+  description: "",
+  services: [
+  {
+    name: "",
+    description: "",
+    duration: undefined,
+    price: undefined,
+  },
+  ],
   img: "",
   address: {
     street: "",
@@ -44,8 +53,43 @@ export function HealthUnitForm({ onDone }: { onDone: () => void }) {
     })
   }
 
+  const setService = (
+  index: number,
+  key: keyof HealthUnitInput["services"][number],
+  value: string | number,
+) => {
+  setForm((f) => ({
+    ...f,
+    services: f.services.map((service, i) =>
+      i === index ? { ...service, [key]: value } : service
+    ),
+  }))
+}
+
+const addService = () => {
+  setForm((f) => ({
+    ...f,
+    services: [
+      ...f.services,
+      {
+        name: "",
+        description: "",
+        duration: undefined,
+        price: undefined,
+      },
+    ],
+  }))
+}
+
+const removeService = (index: number) => {
+  setForm((f) => ({
+    ...f,
+    services: f.services.filter((_, i) => i !== index),
+  }))
+}
+
   return (
-    <form onSubmit={onSubmit} className="space-y-5">
+    <form onSubmit={onSubmit} className="space-y-2">
       <Field label="Nome da unidade" htmlFor="hu-name">
         <Input id="hu-name" required value={form.name} onChange={(e) => set("name", e.target.value)} />
       </Field>
@@ -56,6 +100,9 @@ export function HealthUnitForm({ onDone }: { onDone: () => void }) {
         </Field>
         <Field label="Email" htmlFor="hu-email">
           <Input id="hu-email" type="email" required value={form.email} onChange={(e) => set("email", e.target.value)} />
+        </Field>
+        <Field label="Descrição" htmlFor="hu-description">
+          <Input id="hu-description" type="text" required value={form.description} onChange={(e) => set("description", e.target.value)} />
         </Field>
       </div>
 
@@ -92,6 +139,78 @@ export function HealthUnitForm({ onDone }: { onDone: () => void }) {
             <Input id="hu-state" required maxLength={2} value={form.address.state} onChange={(e) => setAddr("state", e.target.value.toUpperCase())} />
           </Field>
         </div>
+      </fieldset>
+
+      <fieldset className="space-y-4 rounded-2xl border border-border p-4">
+        <legend className="px-1 text-sm font-semibold text-muted-foreground">
+          Serviços
+        </legend>
+
+        {form.services.map((service, index) => (
+          <div
+            key={index}
+            className="space-y-4 rounded-xl border border-border p-4"
+          >
+            <Field label="Nome">
+              <Input
+                value={service.name}
+                onChange={(e) =>
+                  setService(index, "name", e.target.value)
+                }
+              />
+            </Field>
+
+            <Field label="Descrição">
+              <Input
+                value={service.description}
+                onChange={(e) =>
+                  setService(index, "description", e.target.value)
+                }
+              />
+            </Field>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Duração (min)">
+                <Input
+                  type="number"
+                  value={service.duration ?? ""}
+                  onChange={(e) =>
+                    setService(index, "duration", Number(e.target.value))
+                  }
+                />
+              </Field>
+
+              <Field label="Preço">
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={service.price ?? ""}
+                  onChange={(e) =>
+                    setService(index, "price", Number(e.target.value))
+                  }
+                />
+              </Field>
+            </div>
+
+            {form.services.length > 1 && (
+              <Button
+                type="button"
+                variant="danger"
+                onClick={() => removeService(index)}
+              >
+                Remover serviço
+              </Button>
+            )}
+          </div>
+        ))}
+
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={addService}
+        >
+          + Adicionar serviço
+        </Button>
       </fieldset>
 
       {error && (
