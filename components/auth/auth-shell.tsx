@@ -18,7 +18,7 @@ export function AuthShell({
       <aside className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-primary p-12 text-primary-foreground lg:flex">
         <div className="flex items-center gap-2">
           <LogoMark className="h-7 w-7 text-primary-foreground" />
-          <span className="text-lg font-bold tracking-tight">Dr. Aris Clinic</span>
+          <span className="text-lg font-bold tracking-tight">Minha Vez Manager</span>
         </div>
 
         <div className="relative z-10 max-w-md">
@@ -32,7 +32,7 @@ export function AuthShell({
         </div>
 
         <p className="relative z-10 text-sm text-primary-foreground/70">
-          &copy; {new Date().getFullYear()} Dr. Aris Clinic. Todos os direitos reservados.
+          &copy; {new Date().getFullYear()} Minha vez manager. Todos os direitos reservados.
         </p>
 
         {/* Decorative blobs */}
@@ -45,7 +45,7 @@ export function AuthShell({
         <div className="w-full max-w-md">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
             <LogoMark className="h-7 w-7 text-primary" />
-            <span className="text-lg font-bold tracking-tight text-primary">Dr. Aris Clinic</span>
+            <span className="text-lg font-bold tracking-tight text-primary">Minha Vez Manager</span>
           </div>
 
           <h1 className="text-2xl font-bold text-foreground">{title}</h1>

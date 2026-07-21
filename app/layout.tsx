@@ -5,7 +5,7 @@ import { QueryProvider } from "@/components/providers/query-provider"
 import { AuthProvider } from "@/components/providers/auth-provider"
 
 export const metadata: Metadata = {
-  title: "Dr. Aris Clinic — Painel de Gestão",
+  title: "Minha Vez — Painel de Gestão",
   description: "Gestão de consultas, unidades de saúde e profissionais.",
 }
 

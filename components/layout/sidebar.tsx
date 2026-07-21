@@ -41,7 +41,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     <div className="flex h-full flex-col bg-sidebar">
       <div className="flex items-center gap-2 px-6 py-6">
         <LogoMark className="h-7 w-7 text-primary" />
-        <span className="text-lg font-bold tracking-tight text-primary">Dr. Aris Clinic</span>
+        <span className="text-lg font-bold tracking-tight text-primary">Minha Vez Manager</span>
       </div>
 
       <nav className="flex-1 space-y-1 px-4">
